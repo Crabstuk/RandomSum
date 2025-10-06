@@ -1,0 +1,13 @@
+#switchModeButton{
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    margin-top: 20px;
+    
+}
+#authPage{
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    height: 200px
+}

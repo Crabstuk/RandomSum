@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+
+  <div id="authPage">
+    <h1>Make An Account Before Playing</h1>
+    <input id="accountCreationEmailInput" placeholder="email@example.com">
+    <input id="accountCreationUsernameInput" placeholder="TestUserName">
+    <input id="accountCreationPasswordInput" placeholder="password">
+    <button id="confirmAccountCreationButton">Continue</button>
+
+    <input id="signInEmailInput" placeholder="a" style="display: none;">
+    <input id="signInUsernameInput" placeholder="a" style="display: none;">
+    <input id="signInPasswordInput" placeholder="a" style="display: none;">
+    <button id="signInButton" style="display: none;">Log in</button>  
+
+    <button id="switchModeButton" onclick="switchModeInAuth()">I already have an account.</button>
+  </div>
+    
+
+  <div id="gamePage">
+    <canvas width="500" height="500" id="pongGame"></canvas>
+    <button id="someButton" onclick="goRight()">idk</button>
+  </div>
+ <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
