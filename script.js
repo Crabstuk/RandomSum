@@ -19,6 +19,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
+
 const switchModeButton = document.getElementById("switchModeButton")
 //Account creation section of authorization.
 const accountCreationEmailInput = document.getElementById("accountCreationEmailInput")
@@ -32,6 +33,13 @@ const signInPasswordInput = document.getElementById("signInPasswordInput")
 const signInButton = document.getElementById("signInButton")
 
 let authMode = "login"
+
+const createUser = () =>{
+  auth.createUserWithEmailAndPassword(
+    accountCreationEmailInput.value,
+    signInPasswordInput.value
+  ).catch(alert)
+}
 
 const switchModeInAuth = () =>{
   if(authMode && authMode === "login"){
