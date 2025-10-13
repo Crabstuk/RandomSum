@@ -37,7 +37,8 @@ let authMode = "login"
 const createUser = () =>{
   auth.createUserWithEmailAndPassword(
     accountCreationEmailInput.value,
-    signInPasswordInput.value
+    accountCreationPasswordInput.value
+    //auth.currentUser.push(accountCreationUsernameInput.value.trim())
   ).catch(alert)
 }
 
