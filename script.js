@@ -4,21 +4,21 @@
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCehI-syv_3bTO8EfzBfb1ZtuBUYASxgog",
-  authDomain: "ni-wiem.firebaseapp.com",
-  databaseURL: "https://ni-wiem-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "ni-wiem",
-  storageBucket: "ni-wiem.firebasestorage.app",
-  messagingSenderId: "265558938703",
-  appId: "1:265558938703:web:5ff459311d4162a6c6463a",
-  measurementId: "G-ZHJ1Y0G80H"
+  apiKey: "AIzaSyCE4pJ8Iv77_voL9YM24kcHFzKghYwIDuY",
+  authDomain: "idksomething-ced82.firebaseapp.com",
+  databaseURL:"https://idksomething-ced82-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "idksomething-ced82",
+  storageBucket: "idksomething-ced82.firebasestorage.app",
+  messagingSenderId: "557355216917",
+  appId: "1:557355216917:web:833a07e136dfca72769e1c"
 };
-
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db = firebase.database();
 
+
+const signOutUserButton = document.getElementById("signOutUserButton")
 
 const switchModeButton = document.getElementById("switchModeButton")
 //Account creation section of authorization.
@@ -37,11 +37,55 @@ let authMode = "login"
 const createUser = () =>{
   auth.createUserWithEmailAndPassword(
     accountCreationEmailInput.value,
-    accountCreationPasswordInput.value
-    //auth.currentUser.push(accountCreationUsernameInput.value.trim())
-  ).catch(alert)
+    accountCreationPasswordInput.value,
+  ).then((userCredential) => {
+    // Signed in
+    var user = userCredential.user;
+    // ...
+    firebase.database().ref('users/' +  user.uid).set({
+      username:accountCreationUsernameInput.value
+   })
+  }).catch(alert)
 }
 
+const signInUser = () =>{
+  auth.signInWithEmailAndPassword(signInEmailInput.value,signInPasswordInput.value)
+    .then((userCredential) => {
+      let userName = db.ref('users/' + signInEmailInput.value)
+      console.log(userName)
+      console.log(userCredential)
+      // Signed in
+      var user = userCredential.user;
+      // ...
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+  });
+}
+
+const signOutUser = () => {
+  firebase.auth().signOut().then(() => {
+  // Sign-out successful.
+  }).catch((error) => {
+  // An error happened.
+  });
+}
+
+firebase.auth().onAuthStateChanged((user) => {
+if (user) {
+  console.log(user)
+// User is signed in, see docs for a list of available properties
+// https://firebase.google.com/docs/reference/js/v8/firebase.User
+var uid = user.uid;
+// ...
+console.log("1")
+} else {
+// User is signed out
+// ...
+console.log("2")
+}
+});
 const switchModeInAuth = () =>{
   if(authMode && authMode === "login"){
     console.log("i existx ")

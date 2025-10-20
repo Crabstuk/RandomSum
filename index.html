@@ -12,15 +12,16 @@
     <h1>Make An Account Before Playing</h1>
     <input id="accountCreationEmailInput" placeholder="email@example.com">
     <input id="accountCreationUsernameInput" placeholder="TestUserName">
-    <input id="accountCreationPasswordInput" placeholder="password">
+    <input type="password" id="accountCreationPasswordInput" placeholder="password">
     <button id="confirmAccountCreationButton" onclick="createUser()">Continue</button>
 
     <input id="signInEmailInput" placeholder="a" style="display: none;">
     <input id="signInUsernameInput" placeholder="a" style="display: none;">
     <input id="signInPasswordInput" placeholder="a" style="display: none;">
-    <button id="signInButton" style="display: none;">Log in</button>  
+    <button id="signInButton" onclick="signInUser()" style="display: none;">Log in</button>  
 
     <button id="switchModeButton" onclick="switchModeInAuth()">I already have an account.</button>
+    <button id="signOutUserButton" onclick="signOutUser()">Log Out</button>
   </div>
     
 
