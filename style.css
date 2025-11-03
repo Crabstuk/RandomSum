@@ -11,3 +11,7 @@
     width: 500px;
     height: 300px
 }
+#loginRegisterInputDiv{
+    display: flex;
+    flex-direction: column;
+}

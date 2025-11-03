@@ -9,25 +9,27 @@
 <body>
 
   <div id="authPage">
-    <h1>Make An Account Before Playing</h1>
-    <input id="accountCreationEmailInput" placeholder="email@example.com">
-    <input id="accountCreationUsernameInput" placeholder="TestUserName">
-    <input type="password" id="accountCreationPasswordInput" placeholder="password">
-    <button id="confirmAccountCreationButton" onclick="createUser()">Continue</button>
+    <div id="loginRegisterInputDiv">
+      <h1>Make An Account Before Playing</h1>
+      <input id="accountCreationEmailInput" placeholder="email@example.com">
+      <input id="accountCreationUsernameInput" placeholder="TestUserName">
+      <input type="password" id="accountCreationPasswordInput" placeholder="password">
+      <button id="confirmAccountCreationButton" onclick="createUser()">Continue</button>
 
-    <input id="signInEmailInput" placeholder="a" style="display: none;">
-    <input id="signInUsernameInput" placeholder="a" style="display: none;">
-    <input id="signInPasswordInput" placeholder="a" style="display: none;">
-    <button id="signInButton" onclick="signInUser()" style="display: none;">Log in</button>  
+      <input id="signInEmailInput" placeholder="a" style="display: none;">
+      <input id="signInUsernameInput" placeholder="a" style="display: none;">
+      <input id="signInPasswordInput" placeholder="a" style="display: none;">
+      <button id="signInButton" onclick="signInUser()" style="display: none;">Log in</button>  
 
-    <button id="switchModeButton" onclick="switchModeInAuth()">I already have an account.</button>
+      <button id="switchModeButton" onclick="switchModeInAuth()">I already have an account.</button>
+      </div>
     <button id="signOutUserButton" onclick="signOutUser()">Log Out</button>
   </div>
     
 
   <div id="gamePage">
     <canvas width="500" height="500" id="pongGame"></canvas>
-    <button id="someButton" onclick="goRight()">idk</button>
+    <button id="someButton" onclick="updateGame()">idk</button>
   </div>
  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>

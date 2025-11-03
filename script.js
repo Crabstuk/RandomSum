@@ -1,5 +1,4 @@
-
-
+let UserLoggedIn /* please use boolean */ = false 
 // Replace with your Firebase config:
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -16,7 +15,7 @@ firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db = firebase.database();
-
+let uid = null
 
 const signOutUserButton = document.getElementById("signOutUserButton")
 
@@ -32,7 +31,17 @@ const signInUsernameInput = document.getElementById("signInUsernameInput")
 const signInPasswordInput = document.getElementById("signInPasswordInput")
 const signInButton = document.getElementById("signInButton")
 
+const loginRegisterInputDiv = document.querySelector("#loginRegisterInputDiv")
+
 let authMode = "login"
+
+const hideOrShowButtonsUponLoginOrLogout = () => {
+  if(UserLoggedIn){
+    loginRegisterInputDiv.style.display = "none"
+  }else{
+    loginRegisterInputDiv.style.display = "flex"
+  }
+}
 
 const createUser = () =>{
   auth.createUserWithEmailAndPassword(
@@ -41,6 +50,7 @@ const createUser = () =>{
   ).then((userCredential) => {
     // Signed in
     var user = userCredential.user;
+    authMode
     // ...
     firebase.database().ref('users/' +  user.uid).set({
       username:accountCreationUsernameInput.value
@@ -54,9 +64,7 @@ const signInUser = () =>{
       let userName = db.ref('users/' + signInEmailInput.value)
       console.log(userName)
       console.log(userCredential)
-      // Signed in
       var user = userCredential.user;
-      // ...
     })
     .catch((error) => {
       var errorCode = error.code;
@@ -66,7 +74,7 @@ const signInUser = () =>{
 
 const signOutUser = () => {
   firebase.auth().signOut().then(() => {
-  // Sign-out successful.
+    UserLoggedIn = false
   }).catch((error) => {
   // An error happened.
   });
@@ -74,17 +82,24 @@ const signOutUser = () => {
 
 firebase.auth().onAuthStateChanged((user) => {
 if (user) {
+  UserLoggedIn = true
   console.log(user)
-// User is signed in, see docs for a list of available properties
-// https://firebase.google.com/docs/reference/js/v8/firebase.User
-var uid = user.uid;
-// ...
-console.log("1")
+uid = user.uid
+console.log(uid)
+
+db.ref("users/" + uid).set({
+  "online":true
+})
+
+console.log("zalogowany")
 } else {
-// User is signed out
-// ...
-console.log("2")
+  UserLoggedIn = false
+  db.ref("users/" + uid).set({
+  "online":false
+})
+  console.log("wylogowany")
 }
+hideOrShowButtonsUponLoginOrLogout()
 });
 const switchModeInAuth = () =>{
   if(authMode && authMode === "login"){
@@ -122,32 +137,77 @@ const switchModeInAuth = () =>{
   }
 };
 //CANVAS!!!
+const someButton = document.getElementById("someButton");
 const pongGame = document.getElementById("pongGame");
 const ctx = pongGame.getContext("2d");
-
-let BallX = 0;
-let BallY = 0;
-
-ctx.fillRect(BallX,BallY,250,250);
-const someButton = document.getElementById("someButton");
-
-const goRight = () => {
+//ball variables
+let BallX = 250;
+let BallY = 250;
+const radius = 50
+const startAngle = 0
+const endAngle = 2 * Math.PI
+let DeltaX = 5 
+//player variables
+const playerOneX = 20
+let playerOneY = 210
+//code
+const drawBall = () => {
+ctx.beginPath()
+ctx.arc(BallX, BallY, radius, startAngle, endAngle)
+ctx.fill()
+}
+const drawPlayerOne = () => {
+  ctx.fillRect(playerOneX,playerOneY,10,100)
+}
+drawPlayerOne()
+const updateGame  = () => {
+  updateBall()
+  updatePlayerOne()
+}
+// THE FUNCION BELOW MAKES PONG CANVAS GO BRRR IF CALLED THRICE
+const updateBall = () => {
   let direction = "right";
   setInterval(() => {
-      if(BallX >= 0 && BallX < 250 && direction === "right"){
-        ctx.clearRect(BallX,BallY,250,250);
-        BallX += 50;
-        ctx.fillRect(BallX,BallY,250,250);
-      }else if(BallX === 0){
-        direction = "right"
-        ctx.clearRect(BallX,BallY,250,250);
-        BallX += 50;
-        ctx.fillRect(BallX,BallY,250,250);
-      }else{
-        ctx.clearRect(BallX,BallY,250,250);
-        BallX -= 50;
-        ctx.fillRect(BallX,BallY,250,250);
-        direction = "left"
+    ctx.clearRect(playerOneX + 10,0,480,500)
+        drawBall()
+    BallX += DeltaX
+    //DeltaX = Math.abs(DeltaX)+0.5
+    console.log(BallX)
+    if (BallX + radius >= 500|| BallX - radius <= 30){
+      DeltaX = -DeltaX 
+      console.log("mam jaja")
     }
-  }, 25);
+  }, 60);
 };
+
+const updatePlayerOne = () =>{
+  setInterval(() => {
+    ctx.clearRect(10,0,30,500)
+    drawPlayerOne()
+    db.ref("users/" + uid).set({
+      "playerOneY":playerOneY
+    })
+  },60)
+}
+
+document.addEventListener("keydown",(event)=>{
+  let keyPressed = event.key
+  if (keyPressed == "ArrowDown"){
+    playerOneY += 10
+    if(playerOneY >= 400){
+      playerOneY= 400
+    }
+    updatePlayerOne()
+  }else if(keyPressed == "ArrowUp"){
+    playerOneY -= 10
+    if(playerOneY <= 0){
+      playerOneY = 0
+    }
+    updatePlayerOne()
+  }
+})
+window.onbeforeunload = function(){
+  db.ref("users/" + uid).set({
+  "online":false
+  })
+}
