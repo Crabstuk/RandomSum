@@ -143,6 +143,7 @@ const ctx = pongGame.getContext("2d");
 //ball variables
 let BallX = 250;
 let BallY = 250;
+let BallYDestination = 250
 const radius = 50
 const startAngle = 0
 const endAngle = 2 * Math.PI
@@ -172,12 +173,14 @@ const updateBall = () => {
         drawBall()
     BallX += DeltaX
     //DeltaX = Math.abs(DeltaX)+0.5
-    console.log(BallX)
     if (BallX + radius >= 500|| BallX - radius <= 30){
       DeltaX = -DeltaX 
-      console.log("mam jaja")
+      console.log("eee")
     }
-  }, 60);
+    if (BallY + radius >= 500|| BallY - radius <= 30){
+      console.log("aegudbanehdugnf.g hjs,dhb gasgdhkygaskhdas")
+    }
+  }, 30);
 };
 
 const updatePlayerOne = () =>{
