@@ -52,7 +52,7 @@ const createUser = () =>{
     var user = userCredential.user;
     authMode
     // ...
-    firebase.database().ref('users/' +  user.uid).set({
+    firebase.database().ref('users/' +  user.uid).update({
       username:accountCreationUsernameInput.value
    })
   }).catch(alert)
@@ -87,14 +87,14 @@ if (user) {
 uid = user.uid
 console.log(uid)
 
-db.ref("users/" + uid).set({
+db.ref("users/" + uid).update({
   "online":true
 })
 
 console.log("zalogowany")
 } else {
   UserLoggedIn = false
-  db.ref("users/" + uid).set({
+  db.ref("users/" + uid).update({
   "online":false
 })
   console.log("wylogowany")
@@ -148,9 +148,14 @@ const radius = 50
 const startAngle = 0
 const endAngle = 2 * Math.PI
 let DeltaX = 5 
+let DeltaY = 5
 //player variables
 const playerOneX = 20
 let playerOneY = 210
+
+const playerTwoX = 480
+let playerTwoY =  210
+
 //code
 const drawBall = () => {
 ctx.beginPath()
@@ -160,25 +165,33 @@ ctx.fill()
 const drawPlayerOne = () => {
   ctx.fillRect(playerOneX,playerOneY,10,100)
 }
+
+const drawPlayerTwo = () => {
+  ctx.fillRect(playerTwoX, playerTwoY,10,100)
+}
+
 drawPlayerOne()
+drawPlayerTwo()
 const updateGame  = () => {
   updateBall()
   updatePlayerOne()
+  updatePlayerTwo()
 }
 // THE FUNCION BELOW MAKES PONG CANVAS GO BRRR IF CALLED THRICE
 const updateBall = () => {
   let direction = "right";
   setInterval(() => {
-    ctx.clearRect(playerOneX + 10,0,480,500)
+    ctx.clearRect( 0,0,500,500 )
         drawBall()
     BallX += DeltaX
+    BallY += DeltaY
     //DeltaX = Math.abs(DeltaX)+0.5
     if (BallX + radius >= 500|| BallX - radius <= 30){
-      DeltaX = -DeltaX 
-      console.log("eee")
+      DeltaX = -DeltaX
+      DeltaY = (Math.random() * 5) + 1
     }
     if (BallY + radius >= 500|| BallY - radius <= 30){
-      console.log("aegudbanehdugnf.g hjs,dhb gasgdhkygaskhdas")
+      DeltaY = -DeltaY
     }
   }, 30);
 };
@@ -187,30 +200,62 @@ const updatePlayerOne = () =>{
   setInterval(() => {
     ctx.clearRect(10,0,30,500)
     drawPlayerOne()
-    db.ref("users/" + uid).set({
+    db.ref("users/" + uid).update({
       "playerOneY":playerOneY
-    })
+     })
   },60)
 }
 
+const updatePlayerTwo = () => {
+    setInterval(() => {
+    ctx.clearRect(490,0,30,playerTwoY)
+    drawPlayerTwo()
+    db.ref("users/" + uid).update({
+      "playerOneY":playerOneY
+     })
+  },60)
+}
+
+
 document.addEventListener("keydown",(event)=>{
   let keyPressed = event.key
-  if (keyPressed == "ArrowDown"){
+  if (keyPressed == "s"){
     playerOneY += 10
     if(playerOneY >= 400){
       playerOneY= 400
     }
     updatePlayerOne()
-  }else if(keyPressed == "ArrowUp"){
+  }else if(keyPressed == "w"){
     playerOneY -= 10
     if(playerOneY <= 0){
       playerOneY = 0
     }
     updatePlayerOne()
   }
+  //player 2 
+  if (keyPressed == "ArrowDown"){
+    playerTwoY += 10
+    if(playerTwoY >= 400){
+      playerTwoY = 400
+    }
+    updatePlayerTwo()
+  }else if(keyPressed == "ArrowUp"){
+    playerTwoY -= 10
+    if(playerTwoY <= 0){
+      playerTwoY = 0
+    }
+    updatePlayerTwo()
+  }
+
 })
+
+
+document.addEventListener("keydown",(event)=>{
+
+})
+
 window.onbeforeunload = function(){
-  db.ref("users/" + uid).set({
+  db.ref("users/" + uid).update({
   "online":false
   })
 }
