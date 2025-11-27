@@ -35,6 +35,8 @@ const loginRegisterInputDiv = document.querySelector("#loginRegisterInputDiv")
 
 let authMode = "login"
 
+let UserStatus = "offline"
+
 const hideOrShowButtonsUponLoginOrLogout = () => {
   if(UserLoggedIn){
     loginRegisterInputDiv.style.display = "none"
@@ -87,8 +89,11 @@ if (user) {
 uid = user.uid
 console.log(uid)
 
+UserStatus = "on-page"
+
 db.ref("users/" + uid).update({
-  "online":true
+  "online":true,
+  "status":UserStatus
 })
 
 console.log("zalogowany")
@@ -132,10 +137,22 @@ const switchModeInAuth = () =>{
     signInUsernameInput.style.display = "none"
     signInPasswordInput.style.display = "none"
     signInButton.style.display = "none"
-
+ 
     authMode = "login"
   }
 };
+
+const lookForMatch = () =>{
+  if(UserStatus === "on-page"){
+    UserStatus = "ready"
+  }else{
+    UserStatus = "on-page"
+  }
+  db.ref("users/" + uid).update({
+    "status":UserStatus
+  })
+}
+
 //CANVAS!!!
 const someButton = document.getElementById("someButton");
 const pongGame = document.getElementById("pongGame");
@@ -211,7 +228,7 @@ const updatePlayerTwo = () => {
     ctx.clearRect(490,0,30,playerTwoY)
     drawPlayerTwo()
     db.ref("users/" + uid).update({
-      "playerOneY":playerOneY
+      "playerTwoY":playerTwoY
      })
   },60)
 }
@@ -255,7 +272,9 @@ document.addEventListener("keydown",(event)=>{
 })
 
 window.onbeforeunload = function(){
+  UserStatus = "offline"
   db.ref("users/" + uid).update({
-  "online":false
+  "online":false,
+  "status":UserStatus
   })
 }
